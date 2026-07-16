@@ -75,7 +75,15 @@ export default function Header() {
 
               <div className={styles.profileActions}>
                 <button className={styles.profileBtn} onClick={() => alert("Settings opened")}>Settings</button>
-                <button className={styles.profileBtnDanger} onClick={() => alert("Logged out")}>Log Out</button>
+                <button 
+                  className={styles.profileBtnDanger} 
+                  onClick={() => {
+                    localStorage.removeItem("halo_user");
+                    window.location.href = "/";
+                  }}
+                >
+                  Log Out
+                </button>
               </div>
             </div>
           )}
