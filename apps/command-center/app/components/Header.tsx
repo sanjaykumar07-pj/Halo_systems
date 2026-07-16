@@ -5,6 +5,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showProfile, setShowProfile] = useState(false);
 
   return (
     <header className={styles.header}>
@@ -34,11 +35,50 @@ export default function Header() {
           <span className={styles.notifDot} />
         </button>
 
-        <div className={styles.avatar} id="user-avatar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
+        <div style={{ position: "relative" }}>
+          <div 
+            className={styles.avatar} 
+            id="user-avatar" 
+            onClick={() => setShowProfile(!showProfile)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+
+          {showProfile && (
+            <div className={styles.profileDropdown}>
+              <div className={styles.profileHeader}>
+                <div className={styles.profileAvatarLarge}>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div>
+                  <div className={styles.profileName}>Commander Admin</div>
+                  <div className={styles.profileRole}>Operation Command</div>
+                </div>
+              </div>
+              
+              <div className={styles.profileSection}>
+                <div className={styles.profileItem}>
+                  <span className={styles.profileLabel}>Status</span>
+                  <span className={styles.profileValueActive}>Active</span>
+                </div>
+                <div className={styles.profileItem}>
+                  <span className={styles.profileLabel}>System ID</span>
+                  <span className={styles.profileValue}>CMD-001</span>
+                </div>
+              </div>
+
+              <div className={styles.profileActions}>
+                <button className={styles.profileBtn} onClick={() => alert("Settings opened")}>Settings</button>
+                <button className={styles.profileBtnDanger} onClick={() => alert("Logged out")}>Log Out</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

@@ -101,3 +101,121 @@
   border-color: var(--accent-red);
   color: var(--text-primary);
 }
+
+/* Profile Dropdown */
+.profileDropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 280px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  padding: var(--space-md);
+  z-index: 100;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: var(--space-sm);
+}
+
+.profileAvatarLarge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.profileName {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.profileRole {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  margin-bottom: var(--space-sm);
+}
+
+.profileItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.profileLabel {
+  color: var(--text-tertiary);
+}
+
+.profileValue {
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.profileValueActive {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.profileActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profileBtn, .profileBtnDanger {
+  width: 100%;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.profileBtn {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.profileBtn:hover {
+  background: var(--border-default);
+}
+
+.profileBtnDanger {
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--accent-red);
+  border-color: rgba(198, 40, 40, 0.2);
+}
+
+.profileBtnDanger:hover {
+  background: rgba(198, 40, 40, 0.2);
+}
