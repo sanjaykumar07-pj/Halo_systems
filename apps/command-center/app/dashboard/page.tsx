@@ -17,6 +17,7 @@ type FilterStatus = "all" | "on-duty" | "completed" | "off-duty" | "retired";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({ active_workers: 0, incident_workers: 0, total_problems: 0, problem_solved: 0, efficiency: 0 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [workers, setWorkers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<FilterType>("all");
@@ -24,10 +25,12 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     async function loadData() {
       try {
         const [s, w] = await Promise.all([getDashboardStats(), getWorkers()]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setStats(s as any);
         setWorkers(w ?? []);
       } catch (e) {

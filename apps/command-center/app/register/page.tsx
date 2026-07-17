@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "../login.module.css";
 
 export default function RegisterPage() {
@@ -171,7 +172,7 @@ export default function RegisterPage() {
 
           <p className={styles.createAccount}>
             Already have an account?{" "}
-            <a href="/" className={styles.createLink}>Sign in</a>
+            <Link href="/" className={styles.createLink}>Sign in</Link>
           </p>
         </div>
       </div>

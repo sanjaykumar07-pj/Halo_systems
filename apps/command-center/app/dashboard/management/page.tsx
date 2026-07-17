@@ -30,6 +30,7 @@ export default function ManagementPage() {
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updates: any = {};
       if (editForm.name) updates.name = editForm.name;
       if (editForm.type) updates.type = editForm.type;

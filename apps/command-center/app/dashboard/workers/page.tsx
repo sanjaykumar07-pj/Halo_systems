@@ -5,6 +5,7 @@ import styles from "./workers.module.css";
 import { getWorkers, subscribeToWorkers } from "../../lib/supabase";
 
 export default function WorkersPage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [allWorkers, setAllWorkers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");

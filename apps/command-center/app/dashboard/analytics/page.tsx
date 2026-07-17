@@ -30,7 +30,6 @@ export default function AnalyticsPage() {
   const maxValue = Math.max(...CHART_DATA.map((d) => d.value));
   const chartHeight = 200;
   const chartWidth = 600;
-  const barWidth = chartWidth / CHART_DATA.length - 8;
 
   // Generate SVG line chart path
   const points = CHART_DATA.map((d, i) => {

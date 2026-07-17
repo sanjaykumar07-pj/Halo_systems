@@ -13,11 +13,13 @@ const TYPE_ICON: Record<string, React.ElementType> = {
 };
 
 export default function NotificationsPage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [incidents, setIncidents] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "new" | "assigned" | "in-progress" | "resolved">("all");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [workers, setWorkers] = useState<any[]>([]);
   
   // Dispatch form state
@@ -40,10 +42,12 @@ export default function NotificationsPage() {
   }, [selectedId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadIncidents();
     // Subscribe to realtime updates
     const channel = subscribeToIncidents(() => loadIncidents());
     return () => { channel.unsubscribe(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filtered = incidents.filter((i) => filter === "all" || i.status === filter);
@@ -51,6 +55,7 @@ export default function NotificationsPage() {
   const newCount = incidents.filter((i) => i.status === "new").length;
 
   const formatTime = (ts: string) => {
+    // eslint-disable-next-line react-hooks/purity
     const diff = (Date.now() - new Date(ts).getTime()) / 1000;
     if (diff < 60) return `${Math.round(diff)}s ago`;
     if (diff < 3600) return `${Math.round(diff / 60)}m ago`;

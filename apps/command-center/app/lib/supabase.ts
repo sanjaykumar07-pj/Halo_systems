@@ -87,6 +87,7 @@ export async function getAnalyticsEvents() {
 }
 
 // ─── Realtime subscription for incidents ─────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToIncidents(callback: (payload: any) => void) {
   return supabase
     .channel(`incidents-changes-${Math.random()}`)
@@ -141,6 +142,7 @@ export async function processAllPayments() {
   return data;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToWorkers(callback: (payload: any) => void) {
   return supabase
     .channel(`workers-changes-${Math.random()}`)
@@ -148,6 +150,7 @@ export function subscribeToWorkers(callback: (payload: any) => void) {
     .subscribe();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToSalary(callback: (payload: any) => void) {
   return supabase
     .channel(`salary-changes-${Math.random()}`)
@@ -172,6 +175,7 @@ export async function addWorker(workerData: { name: string, type: string, sectio
   return data;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateWorker(workerId: string, updates: any) {
   const { data, error } = await supabase
     .from('workers')

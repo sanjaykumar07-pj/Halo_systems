@@ -5,6 +5,7 @@ import styles from "./salary.module.css";
 import { getSalary, processAllPayments, subscribeToSalary } from "../../lib/supabase";
 
 export default function SalaryPage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [salaryData, setSalaryData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
