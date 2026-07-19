@@ -13,7 +13,8 @@
     "dev:staff": "npm run web --workspace=ratio-staff",
     "dev:fan": "npm run web --workspace=fifa-fan",
     "start:cli": "npx tsx cli.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.10",
