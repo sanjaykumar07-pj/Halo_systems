@@ -36,6 +36,16 @@ vi.mock('@google/genai', () => {
                 reasoning: "Duplicate."
               })};
             }
+            if (prompt.includes('mismatch_worker_trigger')) {
+              return { text: JSON.stringify({
+                incident_id: "temp-id",
+                severity: 3,
+                is_duplicate: false,
+                escalated: false,
+                required_worker_type: "security",
+                reasoning: "Actually needs security."
+              })};
+            }
             return { text: JSON.stringify({
               incident_id: "temp-id",
               severity: 3,
@@ -93,6 +103,35 @@ describe('Pipeline Integration', () => {
     expect(result.dispatch?.assigned_worker_id).toBe('w-1');
   });
 
+  it('uses cached results for identical pipeline runs', async () => {
+    const mockWorkers: Worker[] = [
+      { id: 'w-1', name: 'John', type: 'janitor', section: 101, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' }
+    ];
+
+    // First run populates cache
+    await runCrisisBridgePipeline({
+      rawText: 'Spill near cache test',
+      reporterId: 'fan-1',
+      reporterName: 'Alice',
+      geminiApiKey: 'fake-key',
+      recentIncidents: [],
+      availableWorkers: mockWorkers
+    });
+
+    // Second run should hit intake and dispatch caches
+    const result2 = await runCrisisBridgePipeline({
+      rawText: 'Spill near cache test', // exact same input (case insensitive)
+      reporterId: 'fan-2',
+      reporterName: 'Bob',
+      geminiApiKey: 'fake-key',
+      recentIncidents: [],
+      availableWorkers: mockWorkers
+    });
+
+    expect(result2.intake.incident_type).toBe('spill');
+    expect(result2.dispatch?.worker_name).toBe('John');
+  });
+
   it('handles empty or fully sanitized input', async () => {
     const result = await runCrisisBridgePipeline({
       rawText: '<script></script>', // Sanitizes to empty string
@@ -134,5 +173,24 @@ describe('Pipeline Integration', () => {
     // In the mock, Agent A returns incident_type: 'spill', then Agent B returns required_worker_type: 'janitor'
     expect(result.error).toBe("No available janitor workers found");
     expect(result.dispatch).toBeNull();
+  });
+
+  it('re-routes to a different worker type if Prioritizer overrides Intake prediction', async () => {
+    const mockWorkers: Worker[] = [
+      { id: 'w-sec', name: 'Dave', type: 'security', section: 101, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' }
+    ];
+
+    const result = await runCrisisBridgePipeline({
+      rawText: 'Agent B mismatch_worker_trigger',
+      reporterId: 'fan-1',
+      reporterName: 'Alice',
+      geminiApiKey: 'fake-key',
+      recentIncidents: [],
+      availableWorkers: mockWorkers
+    });
+
+    expect(result.error).toBeUndefined();
+    expect(result.priority.required_worker_type).toBe('security');
+    expect(result.dispatch?.assigned_worker_id).toBe('w-sec');
   });
 });

@@ -51,13 +51,22 @@ export function sanitizeInput(text: string): string {
   const adversarialKeywords: RegExp[] = [
     /ignore previous instructions/gi,
     /ignore all previous instructions/gi,
+    /ignore your instructions/gi,
     /system prompt/gi,
     /you are a /gi,
-    /bypass instructions/gi
+    /you are now an? /gi,
+    /bypass instructions/gi,
+    /disregard the above/gi,
+    /new instructions:/gi,
+    /new instructions:\s*(ignore|act|pretend|override)/gi,
+    /override your rules/gi
   ];
   for (const pattern of adversarialKeywords) {
     sanitized = sanitized.replace(pattern, '[REDACTED]');
   }
+
+  // Prevent DoS via excessive repeated characters
+  sanitized = sanitized.replace(/(.)\1{50,}/g, '[REPEATED_CHARS]');
 
   const MAX_INPUT_LENGTH: number = 1000;
   if (sanitized.length > MAX_INPUT_LENGTH) {
