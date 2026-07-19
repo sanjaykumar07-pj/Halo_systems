@@ -274,7 +274,7 @@ describe('Agent B - Prioritizer', () => {
   });
 
   it('evaluates duplicate status with non-empty recent incidents list', async () => {
-    const recent = [{ id: 'old-2', created_at: 'now', reported_by: 'fan', reporter_name: 'test', raw_text: 'test', parsed_type: 'other', section_id: 100, severity: 4, status: 'assigned', detected_language: 'en', english_translation: 'test', location_description: 'test', confidence: 0.9 }];
+    const recent = [{ id: 'old-2', created_at: 'now', reported_by: 'fan', reporter_name: 'test', raw_text: 'test', parsed_type: 'other' as const, section_id: 100, severity: 4 as const, status: 'assigned' as const, detected_language: 'en', english_translation: 'test', location_description: 'test', confidence: 0.9 }];
     const result = await runPrioritizerAgent({ ...dummyIncident, english_translation: 'duplicate_trigger' }, recent, 'key');
     expect(result.is_duplicate).toBe(true);
   });
