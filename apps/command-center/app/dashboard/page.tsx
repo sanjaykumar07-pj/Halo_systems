@@ -3,6 +3,15 @@
 import { useState, useEffect } from "react";
 import styles from "./dashboard.module.css";
 import { getDashboardStats, getWorkers } from "../lib/supabase";
+import type { Worker } from "@halo/shared";
+
+type Stats = {
+  active_workers: number;
+  incident_workers: number;
+  total_problems: number;
+  problem_solved: number;
+  efficiency: number;
+};
 
 const STAT_CARDS = [
   { key: "active_workers",   label: "Active Workers",   color: "#4caf50" },
@@ -16,9 +25,8 @@ type FilterType = "all" | "janitor" | "medic" | "security";
 type FilterStatus = "all" | "on-duty" | "completed" | "off-duty" | "retired";
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({ active_workers: 0, incident_workers: 0, total_problems: 0, problem_solved: 0, efficiency: 0 });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [workers, setWorkers] = useState<any[]>([]);
+  const [stats, setStats] = useState<Stats>({ active_workers: 0, incident_workers: 0, total_problems: 0, problem_solved: 0, efficiency: 0 });
+  const [workers, setWorkers] = useState<Worker[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<FilterType>("all");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
@@ -30,8 +38,7 @@ export default function DashboardPage() {
     async function loadData() {
       try {
         const [s, w] = await Promise.all([getDashboardStats(), getWorkers()]);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setStats(s as any);
+        setStats(s as Stats);
         setWorkers(w ?? []);
       } catch (e) {
         console.error("Supabase load error:", e);

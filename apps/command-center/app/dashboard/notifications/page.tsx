@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styles from "./notifications.module.css";
 import { getIncidents, subscribeToIncidents, updateIncidentStatus, getWorkers, assignIncident } from "../../lib/supabase";
+import type { Incident, Worker } from "@halo/shared";
 import { Stethoscope, ShieldAlert, Droplet, Flame, Building, Volume2, Accessibility, Pin } from "lucide-react";
 
 const SEVERITY_COLOR: Record<number, string> = { 1: "#ef5350", 2: "#ffa726", 3: "#ffee58", 4: "#4caf50", 5: "#42a5f5" };
@@ -13,14 +14,13 @@ const TYPE_ICON: Record<string, React.ElementType> = {
 };
 
 export default function NotificationsPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [incidents, setIncidents] = useState<any[]>([]);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "new" | "assigned" | "in-progress" | "resolved">("all");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [workers, setWorkers] = useState<any[]>([]);
+  const [workers, setWorkers] = useState<Worker[]>([]);
+  const [now, setNow] = useState(Date.now());
   
   // Dispatch form state
   const [dispatchWorker, setDispatchWorker] = useState<string>("");
@@ -46,7 +46,11 @@ export default function NotificationsPage() {
     loadIncidents();
     // Subscribe to realtime updates
     const channel = subscribeToIncidents(() => loadIncidents());
-    return () => { channel.unsubscribe(); };
+    const interval = setInterval(() => setNow(Date.now()), 10000);
+    return () => { 
+      channel.unsubscribe(); 
+      clearInterval(interval);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,8 +59,7 @@ export default function NotificationsPage() {
   const newCount = incidents.filter((i) => i.status === "new").length;
 
   const formatTime = (ts: string) => {
-    // eslint-disable-next-line react-hooks/purity
-    const diff = (Date.now() - new Date(ts).getTime()) / 1000;
+    const diff = (now - new Date(ts).getTime()) / 1000;
     if (diff < 60) return `${Math.round(diff)}s ago`;
     if (diff < 3600) return `${Math.round(diff / 60)}m ago`;
     return `${Math.round(diff / 3600)}h ago`;

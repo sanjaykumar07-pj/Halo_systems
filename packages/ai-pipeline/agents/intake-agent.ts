@@ -34,7 +34,7 @@ export async function runIntakeAgent(
   const ai = new GoogleGenAI({ apiKey: geminiApiKey });
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-1.5-flash-8b',
     contents: [
       {
         role: 'user',

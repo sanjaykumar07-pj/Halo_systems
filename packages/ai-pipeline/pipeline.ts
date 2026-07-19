@@ -55,6 +55,10 @@ export function sanitizeInput(text: string): string {
   return sanitized.trim();
 }
 
+// Caches for efficiency
+const intakeCache = new Map<string, IntakeResult>();
+const dispatchCache = new Map<string, DispatchResult>();
+
 /**
  * Run the full Crisis-Bridge pipeline.
  * Returns structured results from all three agents.
@@ -74,38 +78,70 @@ export async function runCrisisBridgePipeline(
   }
 
   // ── Stage 1: Agent A — Intake ───────────────────────────
-  const intake = await runIntakeAgent(sanitizedText, input.geminiApiKey);
+  let intake: IntakeResult;
+  const normalizedInput = sanitizedText.toLowerCase();
+  if (intakeCache.has(normalizedInput)) {
+    intake = intakeCache.get(normalizedInput)!;
+  } else {
+    intake = await runIntakeAgent(sanitizedText, input.geminiApiKey);
+    intakeCache.set(normalizedInput, intake);
+  }
 
   // Generate a temporary ID for this incident
   const tempId = crypto.randomUUID();
 
-  // ── Stage 2: Agent B — Prioritizer ──────────────────────
-  const priority = await runPrioritizerAgent(
-    {
-      incident_id: tempId,
-      incident_type: intake.incident_type,
-      english_translation: intake.english_translation,
-      location: intake.location,
-      section_id: intake.section_id,
-      urgency_hint: intake.urgency_hint,
-    },
-    input.recentIncidents,
-    input.geminiApiKey
+  // ── Parallel Stage 2: Prioritizer & Worker Search ───────
+  
+  // Pre-filter recent incidents to save LLM context window tokens
+  const relevantIncidents = input.recentIncidents.filter(
+    (i) => i.parsed_type === intake.incident_type || i.section_id === intake.section_id
   );
+
+  // Deterministically map worker type to search in parallel with AI prioritizer
+  const typeToWorker: Record<string, string> = {
+    medical: 'medic', fire: 'security', security: 'security',
+    structural: 'security', spill: 'janitor', noise: 'janitor',
+    accessibility: 'janitor', other: 'security',
+  };
+  const predictedWorkerType = typeToWorker[intake.incident_type] || 'security';
+
+  const [priority, nearestWorker] = await Promise.all([
+    runPrioritizerAgent(
+      {
+        incident_id: tempId,
+        incident_type: intake.incident_type,
+        english_translation: intake.english_translation,
+        location: intake.location,
+        section_id: intake.section_id,
+        urgency_hint: intake.urgency_hint,
+      },
+      relevantIncidents,
+      input.geminiApiKey
+    ),
+    Promise.resolve(findNearestWorker(
+      input.availableWorkers,
+      predictedWorkerType,
+      intake.section_id
+    ))
+  ]);
 
   // Skip dispatch if duplicate
   if (priority.is_duplicate) {
     return { intake, priority, dispatch: null };
   }
 
-  // ── Stage 3: Agent C — Dispatcher ──────────────────────
-  const nearestWorker = findNearestWorker(
-    input.availableWorkers,
-    priority.required_worker_type,
-    intake.section_id
-  );
+  // Fallback if priority agent returned a DIFFERENT worker type than we predicted
+  // (In 99% of cases, it won't, so we save time)
+  let assignedWorker = nearestWorker;
+  if (priority.required_worker_type !== predictedWorkerType) {
+    assignedWorker = findNearestWorker(
+      input.availableWorkers,
+      priority.required_worker_type,
+      intake.section_id
+    );
+  }
 
-  if (!nearestWorker) {
+  if (!assignedWorker) {
     return {
       intake,
       priority,
@@ -114,18 +150,34 @@ export async function runCrisisBridgePipeline(
     };
   }
 
-  const dispatch = await runDispatcherAgent(
-    {
-      incident_id: tempId,
-      incident_type: intake.incident_type,
-      severity: priority.severity,
-      location: intake.location,
-      section_id: intake.section_id,
-      english_translation: intake.english_translation,
-    },
-    nearestWorker,
-    input.geminiApiKey
-  );
+  // ── Stage 3: Agent C — Dispatcher ──────────────────────
+  const dispatchCacheKey = `${intake.incident_type}:${intake.location}:${intake.section_id}:${assignedWorker.language}:${assignedWorker.section}`;
+  let dispatch: DispatchResult;
+
+  if (dispatchCache.has(dispatchCacheKey)) {
+    // Clone and inject correct dynamic IDs
+    dispatch = { 
+      ...dispatchCache.get(dispatchCacheKey)!, 
+      incident_id: tempId, 
+      assigned_worker_id: assignedWorker.id, 
+      worker_name: assignedWorker.name, 
+      worker_type: assignedWorker.type 
+    };
+  } else {
+    dispatch = await runDispatcherAgent(
+      {
+        incident_id: tempId,
+        incident_type: intake.incident_type,
+        severity: priority.severity,
+        location: intake.location,
+        section_id: intake.section_id,
+        english_translation: intake.english_translation,
+      },
+      assignedWorker,
+      input.geminiApiKey
+    );
+    dispatchCache.set(dispatchCacheKey, dispatch);
+  }
 
   return { intake, priority, dispatch };
 }
