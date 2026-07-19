@@ -47,7 +47,20 @@ export function sanitizeInput(text: string): string {
   if (!text) return "";
   // Strip control characters and basic HTML tags to prevent injection/XSS
   let sanitized = text.replace(/[\x00-\x1F\x7F]/g, '');
-  sanitized = sanitized.replace(/<[^>]*>/g, '');
+  sanitized = sanitized.replace(/<[^>]*>?/g, '');
+  
+  // Prompt Injection Mitigations
+  const adversarialKeywords = [
+    /ignore previous instructions/gi,
+    /ignore all previous instructions/gi,
+    /system prompt/gi,
+    /you are a /gi,
+    /bypass instructions/gi
+  ];
+  for (const pattern of adversarialKeywords) {
+    sanitized = sanitized.replace(pattern, '[REDACTED]');
+  }
+
   // Limit length to prevent DoS via massive context
   if (sanitized.length > 1000) {
     sanitized = sanitized.substring(0, 1000);

@@ -126,8 +126,7 @@ describe('Input Sanitization', () => {
     const clean = sanitizeInput(injection);
     expect(clean).not.toContain('<system>');
     expect(clean).not.toContain('<div');
-    expect(clean).toContain('Ignore previous instructions');
-    expect(clean).toContain('SQLi: DROP TABLE');
+    expect(clean).toContain('[REDACTED]. SQLi: DROP TABLE override');
   });
 
   it('truncates input that exceeds the 1000 character length boundary', () => {
