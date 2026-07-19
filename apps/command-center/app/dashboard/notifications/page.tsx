@@ -98,6 +98,7 @@ export default function NotificationsPage() {
               key={inc.id}
               className={`${styles.messageItem} ${selectedId === inc.id ? styles.selected : ""} ${inc.status === "new" ? styles.unread : ""}`}
               onClick={() => setSelectedId(inc.id)}
+              aria-label={`Incident: ${inc.parsed_type} at ${inc.location_description}. Severity: ${inc.severity}. Status: ${inc.status}.`}
             >
               <div className={styles.msgHeader}>
                 <span className={styles.msgIcon}>
@@ -193,6 +194,7 @@ export default function NotificationsPage() {
                         className={styles.dispatchSelect}
                         value={dispatchWorker}
                         onChange={(e) => setDispatchWorker(e.target.value)}
+                        aria-label="Assign Worker"
                       >
                         <option value="">Select Worker...</option>
                         {workers.map(w => (
@@ -207,6 +209,7 @@ export default function NotificationsPage() {
                         className={styles.dispatchInput}
                         value={dispatchInstructions}
                         onChange={(e) => setDispatchInstructions(e.target.value)}
+                        aria-label="Dispatch Instructions"
                       />
                       <button 
                         className="btn btn-primary" 

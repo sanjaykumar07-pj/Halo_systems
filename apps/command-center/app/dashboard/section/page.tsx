@@ -29,8 +29,8 @@ export default function SectionPage() {
       <div className={styles.headerRow}>
         <h2 className={styles.title}>Stadium Map</h2>
         <div className={styles.viewToggle}>
-          <button className={`${styles.toggleBtn} ${viewMode === "map" ? styles.active : ""}`} onClick={() => setViewMode("map")}>Map</button>
-          <button className={`${styles.toggleBtn} ${viewMode === "list" ? styles.active : ""}`} onClick={() => setViewMode("list")}>List</button>
+          <button className={`${styles.toggleBtn} ${viewMode === "map" ? styles.active : ""}`} onClick={() => setViewMode("map")} aria-label="Switch to Map View">Map</button>
+          <button className={`${styles.toggleBtn} ${viewMode === "list" ? styles.active : ""}`} onClick={() => setViewMode("list")} aria-label="Switch to List View">List</button>
         </div>
       </div>
 
@@ -63,7 +63,20 @@ export default function SectionPage() {
               const isSelected = selectedSection === section.id;
 
               return (
-                <g key={section.id} onClick={() => setSelectedSection(section.id)} style={{ cursor: "pointer" }}>
+                <g 
+                  key={section.id} 
+                  onClick={() => setSelectedSection(section.id)} 
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedSection(section.id);
+                    }
+                  }}
+                  style={{ cursor: "pointer", outline: "none" }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View Section ${section.id}, ${Math.round(occupancyPct * 100)}% occupancy`}
+                >
                   <rect
                     x={x - 30}
                     y={y - 18}
@@ -132,7 +145,21 @@ export default function SectionPage() {
             </thead>
             <tbody>
               {SECTIONS.map((s) => (
-                <tr key={s.id} className={styles.tr} onClick={() => { setSelectedSection(s.id); setViewMode("map"); }}>
+                <tr 
+                  key={s.id} 
+                  className={styles.tr} 
+                  onClick={() => { setSelectedSection(s.id); setViewMode("map"); }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedSection(s.id);
+                      setViewMode("map");
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View details for Section ${s.id}`}
+                >
                   <td className={styles.td}>{s.name}</td>
                   <td className={styles.td}>{s.gate}</td>
                   <td className={styles.td}>{s.floor}</td>

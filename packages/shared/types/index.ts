@@ -56,6 +56,7 @@ export interface Incident {
   resolved_at?: string;
   eta_minutes?: number;
   confidence: number;        // AI confidence 0-1
+  ai_reasoning?: string;     // Added reasoning from AI
   created_at: string;
 }
 

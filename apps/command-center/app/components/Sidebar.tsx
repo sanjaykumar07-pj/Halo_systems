@@ -136,6 +136,7 @@ export default function Sidebar() {
           onClick={handleSignOut} 
           className={styles.navItem} 
           style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: '0.75rem 1rem', marginTop: '0.5rem', color: '#ff5252' }}
+          aria-label="Sign Out"
         >
           <span className={styles.navIcon}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
