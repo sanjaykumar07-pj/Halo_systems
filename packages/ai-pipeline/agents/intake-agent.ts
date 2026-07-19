@@ -6,25 +6,10 @@
 
 import type { IntakeResult } from '@halo/shared';
 
-const INTAKE_PROMPT = `You are Agent A — the Intake Parser for the HALO Stadium Operations system.
+import * as fs from 'fs';
+import * as path from 'path';
 
-Your job is to parse chaotic, multilingual incident reports from stadium fans and extract structured information.
-
-Return ONLY valid JSON with this exact schema:
-{
-  "original_text": "the exact input text",
-  "detected_language": "ISO 639-1 code",
-  "english_translation": "accurate English translation",
-  "incident_type": "spill | medical | security | fire | structural | noise | accessibility | other",
-  "location": "extracted location",
-  "section_id": null or integer,
-  "urgency_hint": "critical | high | medium | low",
-  "confidence": 0.0 to 1.0
-}
-
-Classification: medical/hurt/injured→medical, fight/violence/weapon/stuck→security, spill/wet/dirty→spill, fire/smoke→fire, blocked/broken→structural, loud/overwhelming→noise, wheelchair/ramp→accessibility.
-Urgency: life-threatening→critical, safety risk→high, operational→medium, comfort→low.
-Return ONLY the JSON, no markdown.`;
+const INTAKE_PROMPT = fs.readFileSync(path.join(__dirname, '../prompts/intake.txt'), 'utf-8');
 
 export async function runIntakeAgent(
   rawText: string,

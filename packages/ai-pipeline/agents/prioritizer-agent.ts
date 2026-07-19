@@ -5,24 +5,10 @@
 
 import type { PrioritizedIncident, Incident, IncidentSeverity } from '@halo/shared';
 
-const PRIORITIZER_PROMPT = `You are Agent B — the Prioritizer for HALO Stadium Operations.
-Assign severity (1=critical to 5=trivial), detect duplicates, determine worker type needed.
+import * as fs from 'fs';
+import * as path from 'path';
 
-Return ONLY valid JSON:
-{
-  "incident_id": "same as input",
-  "severity": 1-5,
-  "is_duplicate": true/false,
-  "duplicate_of": "id or null",
-  "escalated": true/false,
-  "required_worker_type": "janitor | medic | security",
-  "reasoning": "brief explanation"
-}
-
-Severity: 1=life-threatening, 2=safety risk, 3=operational, 4=minor, 5=informational.
-Worker mapping: spill→janitor, medical→medic, security/fire/structural→security.
-Escalate if: 3+ incidents same section in 10min, any severity 1, or crowd panic.
-Duplicate if: same type + same section within 10min.`;
+const PRIORITIZER_PROMPT = fs.readFileSync(path.join(__dirname, '../prompts/prioritizer.txt'), 'utf-8');
 
 export async function runPrioritizerAgent(
   incident: {
@@ -101,7 +87,7 @@ export async function runPrioritizerAgent(
       severity: typeToSeverity[incident.incident_type] ?? 3,
       is_duplicate: false,
       escalated: (typeToSeverity[incident.incident_type] ?? 3) === 1,
-      required_worker_type: (typeToWorker[incident.incident_type] ?? 'security') as any,
+      required_worker_type: (typeToWorker[incident.incident_type] ?? 'security') as WorkerType,
       reasoning: 'Fallback: AI parse failed, using rule-based classification',
     };
   }

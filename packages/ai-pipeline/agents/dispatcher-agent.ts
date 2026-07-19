@@ -5,24 +5,10 @@
 
 import type { DispatchResult, Worker } from '@halo/shared';
 
-const DISPATCHER_PROMPT = `You are Agent C — the Dispatcher for HALO Stadium Operations.
-Generate actionable dispatch instructions for a worker, translated to their language.
+import * as fs from 'fs';
+import * as path from 'path';
 
-Return ONLY valid JSON:
-{
-  "incident_id": "same as input",
-  "assigned_worker_id": "worker id",
-  "worker_name": "name",
-  "worker_type": "type",
-  "eta_minutes": integer,
-  "route_instructions": "step-by-step directions using stadium landmarks",
-  "translated_message": "full dispatch message in worker's language",
-  "target_language": "language code"
-}
-
-ETA rules: adjacent sections ~1min, different floors ~2-3min, different gates ~3-5min.
-Message format: 🚨 [EMOJI] [TYPE] — [LOCATION] [DESCRIPTION] Route: [ROUTE] ETA: [X]min
-Severity emojis: 1=🔴, 2=🟠, 3=🟡, 4=🟢, 5=⚪`;
+const DISPATCHER_PROMPT = fs.readFileSync(path.join(__dirname, '../prompts/dispatcher.txt'), 'utf-8');
 
 export async function runDispatcherAgent(
   incident: {

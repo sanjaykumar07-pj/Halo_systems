@@ -51,7 +51,7 @@ An incident is a DUPLICATE if:
 ## Escalation
 ESCALATE (set escalated=true) if:
 - 3+ incidents in the same section within 10 minutes
-- Any severity 1 incident
+- Repeated severity-1 events
 - Keywords: "multiple", "crowd", "panic", "stampede"
 
 ## Important

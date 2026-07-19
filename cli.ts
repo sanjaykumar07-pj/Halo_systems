@@ -14,7 +14,7 @@ const mockRecentIncidents: Incident[] = [
     raw_text: 'There is a huge spill near the bathrooms',
     parsed_type: 'spill',
     section_id: 102,
-    priority: 3,
+    severity: 3,
     status: 'assigned'
   }
 ];
