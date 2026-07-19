@@ -3,7 +3,7 @@
  * Scores incident severity, detects duplicates, determines required worker type.
  */
 
-import type { PrioritizedIncident, Incident, IncidentSeverity } from '@halo/shared';
+import type { PrioritizedIncident, Incident, IncidentSeverity, WorkerType } from '@halo/shared';
 
 import * as fs from 'fs';
 import * as path from 'path';

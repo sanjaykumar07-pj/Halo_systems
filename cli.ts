@@ -10,19 +10,20 @@ const mockRecentIncidents: Incident[] = [
   {
     id: 'inc-1',
     created_at: new Date(Date.now() - 5 * 60000).toISOString(), // 5 mins ago
-    reporter_id: 'fan-123',
+    reported_by: 'fan-123',
+    reporter_name: 'Fan',
     raw_text: 'There is a huge spill near the bathrooms',
     parsed_type: 'spill',
     section_id: 102,
     severity: 3,
-    status: 'assigned'
+    status: 'assigned', detected_language: 'en', english_translation: 'There is a huge spill near the bathrooms', location_description: 'Near bathrooms', confidence: 0.95
   }
 ];
 
 const mockWorkers: Worker[] = [
-  { id: 'w-1', name: 'John (Janitor)', type: 'janitor', section: 101, status: 'on-duty', language: 'en' },
-  { id: 'w-2', name: 'Maria (Medic)', type: 'medic', section: 105, status: 'on-duty', language: 'es' },
-  { id: 'w-3', name: 'Dave (Security)', type: 'security', section: 103, status: 'on-duty', language: 'en' }
+  { id: 'w-1', name: 'John (Janitor)', type: 'janitor', section: 101, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
+  { id: 'w-2', name: 'Maria (Medic)', type: 'medic', section: 105, status: 'on-duty', language: 'es', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
+  { id: 'w-3', name: 'Dave (Security)', type: 'security', section: 103, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' }
 ];
 
 async function main() {

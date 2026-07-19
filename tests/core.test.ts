@@ -227,7 +227,7 @@ describe('Agent B - Prioritizer', () => {
 });
 
 describe('Agent C - Dispatcher', () => {
-  const dummyWorker: Worker = { id: 'w-1', name: 'Juan', type: 'janitor', section: 102, status: 'on-duty', language: 'es' };
+  const dummyWorker: Worker = { id: 'w-1', name: 'Juan', type: 'janitor', section: 102, status: 'on-duty', language: 'es', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' };
   const incidentObj = {
     incident_id: 'test',
     incident_type: 'spill',
@@ -239,10 +239,10 @@ describe('Agent C - Dispatcher', () => {
 
   it('identifies the nearest available worker using section distance', () => {
     const workers: Worker[] = [
-      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es' },
-      { id: 'w-2', name: 'Bob', type: 'janitor', section: 106, status: 'on-duty', language: 'en' },
-      { id: 'w-3', name: 'Alice', type: 'janitor', section: 106, status: 'busy', language: 'en' },
-      { id: 'w-4', name: 'Mike', type: 'medic', section: 105, status: 'on-duty', language: 'en' },
+      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
+      { id: 'w-2', name: 'Bob', type: 'janitor', section: 106, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
+      { id: 'w-3', name: 'Alice', type: 'janitor', section: 106, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
+      { id: 'w-4', name: 'Mike', type: 'medic', section: 105, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
     ];
     
     const nearest = findNearestWorker(workers, 'janitor', 105);
@@ -251,7 +251,7 @@ describe('Agent C - Dispatcher', () => {
 
   it('selects the first available worker if incident section_id is null', () => {
     const workers: Worker[] = [
-      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es' },
+      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
     ];
     
     const nearest = findNearestWorker(workers, 'janitor', null);
@@ -265,7 +265,7 @@ describe('Agent C - Dispatcher', () => {
 
   it('returns null when there are workers but no matching worker type is available', () => {
     const workers: Worker[] = [
-      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es' },
+      { id: 'w-1', name: 'Juan', type: 'janitor', section: 110, status: 'on-duty', language: 'es', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' },
     ];
     const nearest = findNearestWorker(workers, 'security', 105);
     expect(nearest).toBeNull();

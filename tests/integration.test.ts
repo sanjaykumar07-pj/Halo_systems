@@ -66,7 +66,7 @@ vi.mock('@google/genai', () => {
 describe('Pipeline Integration', () => {
   it('runs an incident through the full triage and dispatch pipeline', async () => {
     const mockWorkers: Worker[] = [
-      { id: 'w-1', name: 'John', type: 'janitor', section: 101, status: 'on-duty', language: 'en' }
+      { id: 'w-1', name: 'John', type: 'janitor', section: 101, status: 'on-duty', language: 'en', worker_id: 'W-TEST', user_id: 'U-TEST', efficiency: 95, created_at: '2026-07-19T00:00:00Z' }
     ];
 
     const result = await runCrisisBridgePipeline({
