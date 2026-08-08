@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./login.module.css";
-import { signInWithGoogle, signInWithEmail } from "./lib/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,51 +15,35 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address.");
+    if (!formData.email || !formData.password) {
+      alert("Please enter your email and password.");
       setIsLoading(false);
       return;
     }
 
-    if (!formData.email.toLowerCase().endsWith("@gmail.com")) {
-      alert("Please use a valid Google email address (@gmail.com).");
-      setIsLoading(false);
-      return;
-    }
-    
-    try {
-      await signInWithEmail(formData.email, formData.password);
-      
-      // Route based on role
+    // Store session locally and route based on role
+    const session = {
+      email: formData.email,
+      role: formData.role,
+      clientId: formData.clientId,
+      loggedInAt: new Date().toISOString(),
+    };
+    localStorage.setItem("halo_user", JSON.stringify(session));
+
+    setTimeout(() => {
       if (formData.role === "staff") {
-        window.location.href = process.env.NEXT_PUBLIC_STAFF_APP_URL || "http://localhost:8084";
+        window.location.href = "http://localhost:8084";
       } else if (formData.role === "fan") {
-        window.location.href = process.env.NEXT_PUBLIC_FAN_APP_URL || "http://localhost:8082";
+        window.location.href = "http://localhost:8082";
       } else {
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || "Failed to sign in. Please check your credentials.");
-    } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsLoading(true);
-      await signInWithGoogle();
-      // Supabase handles the redirect automatically if successful
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
+    }, 500);
   };
 
   return (
@@ -193,16 +176,7 @@ export default function LoginPage() {
               )}
             </button>
 
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              className={`btn ${styles.submitBtn}`}
-              disabled={isLoading}
-              style={{ marginTop: "1rem", backgroundColor: "#fff", color: "#333", border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
-            >
-              <img src="https://authjs.dev/img/providers/google.svg" alt="Google" width="20" height="20" />
-              Sign in with Google
-            </button>
+
           </form>
 
           <p className={styles.createAccount}>
