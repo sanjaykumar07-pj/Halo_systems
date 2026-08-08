@@ -38,9 +38,9 @@ export default function LoginPage() {
       
       // Route based on role
       if (formData.role === "staff") {
-        window.open("http://localhost:8084", "_blank");
+        window.location.href = process.env.NEXT_PUBLIC_STAFF_APP_URL || "http://localhost:8084";
       } else if (formData.role === "fan") {
-        window.open("http://localhost:8082", "_blank");
+        window.location.href = process.env.NEXT_PUBLIC_FAN_APP_URL || "http://localhost:8082";
       } else {
         router.push("/dashboard");
       }
