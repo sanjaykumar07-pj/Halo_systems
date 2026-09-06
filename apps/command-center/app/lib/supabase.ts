@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://avkorqyoxyrxjvfncuji.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2a29ycXlveHlyeGp2Zm5jdWppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQxMDE0NjYsImV4cCI6MjA5OTY3NzQ2Nn0.6WsEMdOaUChQ9ZWWLXSNgXlgwpYT-eBXPnkyLU24D2U';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// ─── Authentication ──────────────────────────────────────
+// â”€â”€â”€ Authentication â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -47,7 +47,7 @@ export async function signOutUser() {
   if (error) throw error;
 }
 
-// ─── Workers ────────────────────────────────────────────
+// â”€â”€â”€ Workers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function getWorkers() {
   const { data, error } = await supabase
     .from('workers')
@@ -87,7 +87,7 @@ export async function getDashboardStats() {
   };
 }
 
-// ─── Incidents ───────────────────────────────────────────
+// â”€â”€â”€ Incidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function getIncidents() {
   const { data, error } = await supabase
     .from('incidents')
@@ -97,7 +97,7 @@ export async function getIncidents() {
   return data;
 }
 
-// ─── Sections ────────────────────────────────────────────
+// â”€â”€â”€ Sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function getSections() {
   const { data, error } = await supabase
     .from('sections')
@@ -107,7 +107,7 @@ export async function getSections() {
   return data;
 }
 
-// ─── Salary ──────────────────────────────────────────────
+// â”€â”€â”€ Salary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function getSalary() {
   const { data, error } = await supabase
     .from('salary')
@@ -117,7 +117,7 @@ export async function getSalary() {
   return data;
 }
 
-// ─── Analytics ───────────────────────────────────────────
+// â”€â”€â”€ Analytics â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function getAnalyticsEvents() {
   const { data, error } = await supabase
     .from('analytics_events')
@@ -128,7 +128,7 @@ export async function getAnalyticsEvents() {
   return data;
 }
 
-// ─── Realtime subscription for incidents ─────────────────
+// â”€â”€â”€ Realtime subscription for incidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToIncidents(callback: (payload: any) => void) {
   return supabase
@@ -137,7 +137,7 @@ export function subscribeToIncidents(callback: (payload: any) => void) {
     .subscribe();
 }
 
-// ─── Mutations & Subscriptions ───────────────────────────
+// â”€â”€â”€ Mutations & Subscriptions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export async function updateIncidentStatus(id: string, status: string) {
   const { data, error } = await supabase
     .from('incidents')
@@ -237,3 +237,4 @@ export async function removeWorker(workerId: string) {
   if (error) throw error;
   return data;
 }
+

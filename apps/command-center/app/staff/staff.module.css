@@ -1,0 +1,57 @@
+﻿/* Staff Dashboard CSS */
+.container { min-height: 100vh; background: #050508; color: #f0f0f5; font-family: 'Inter', -apple-system, sans-serif; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 16px; }
+.greeting { font-size: 13px; color: #8888a0; margin-bottom: 2px; }
+.workerName { font-size: 22px; font-weight: 800; color: #f0f0f5; }
+.workerMeta { font-size: 12px; color: #8888a0; margin-top: 4px; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: #c62828; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.avatar:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(198,40,40,0.4); }
+.avatarText { font-size: 18px; font-weight: 800; color: #fff; }
+.statsRow { display: flex; gap: 12px; padding: 0 24px; margin-bottom: 20px; }
+.statPill { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px; border-radius: 12px; background: #0d0d12; border: 1px solid; transition: transform 0.2s ease; }
+.statPill:hover { transform: translateY(-2px); }
+.statNum { font-size: 22px; font-weight: 800; }
+.statLabel { font-size: 11px; color: #8888a0; margin-top: 2px; }
+.tabs { display: flex; margin: 0 24px; background: #0d0d12; border-radius: 10px; padding: 3px; margin-bottom: 16px; }
+.tab { flex: 1; padding: 8px; text-align: center; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; color: #8888a0; background: none; border: none; transition: all 0.2s ease; }
+.tabActive { background: #c62828; color: #fff; }
+.scroll { padding: 0 24px 32px; display: flex; flex-direction: column; gap: 12px; }
+.empty { text-align: center; padding: 60px 0; color: #8888a0; font-size: 14px; }
+.loading { display: flex; align-items: center; justify-content: center; padding: 80px 0; }
+.spinner { width: 32px; height: 32px; border: 3px solid #1e1e2e; border-top-color: #c62828; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.card { background: #0d0d12; border-radius: 16px; border: 1px solid #1e1e2e; overflow: hidden; display: flex; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card:hover { border-color: #2a2a3e; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.severityBar { width: 4px; flex-shrink: 0; }
+.cardBody { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.cardHeader { display: flex; align-items: center; gap: 10px; }
+.cardIcon { font-size: 20px; }
+.cardTitleBlock { flex: 1; }
+.cardType { font-size: 12px; font-weight: 800; color: #f0f0f5; letter-spacing: 0.5px; text-transform: uppercase; }
+.cardSection { font-size: 11px; color: #8888a0; }
+.severityTag { padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 0.3px; }
+.cardMessage { font-size: 14px; color: #c0c0d0; line-height: 20px; }
+.cardLocation { font-size: 12px; color: #8888a0; }
+.cardFooter { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.statusDot { display: flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.statusText { font-size: 12px; color: #8888a0; text-transform: capitalize; }
+.actions { display: flex; gap: 8px; }
+.btnAccept { background: #c62828; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #fff; border: none; cursor: pointer; transition: background 0.2s ease; }
+.btnAccept:hover { background: #ef5350; }
+.btnResolve { background: #1e3a1e; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #fff; border: 1px solid #4caf50; cursor: pointer; transition: background 0.2s ease; }
+.btnResolve:hover { background: #2e5a2e; }
+.profileOverlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,5,8,0.92); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+.profileCard { background: #0d0d12; border-radius: 20px; padding: 24px; border: 1px solid #1e1e2e; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 400px; position: relative; }
+.closeProfile { position: absolute; top: 16px; right: 16px; padding: 8px; cursor: pointer; color: #8888a0; font-size: 20px; background: none; border: none; }
+.closeProfile:hover { color: #f0f0f5; }
+.profileHeader { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; margin-top: 12px; }
+.profileAvatar { width: 80px; height: 80px; border-radius: 50%; background: #c62828; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.profileAvatarText { font-size: 32px; font-weight: 800; color: #fff; }
+.profileInfoRow { display: flex; gap: 12px; width: 100%; margin-bottom: 12px; }
+.profileInfoBox { flex: 1; background: #14141d; padding: 16px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid #1e1e2e; }
+.profileInfoLabel { font-size: 11px; color: #8888a0; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.profileInfoVal { font-size: 16px; font-weight: 800; color: #f0f0f5; }
+.logoutBtn { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #ef5350; background: none; cursor: pointer; margin-top: 16px; }
+.logoutBtn:hover { background: rgba(239,83,80,0.1); }
+.logoutText { color: #ef5350; font-weight: 700; font-size: 14px; }

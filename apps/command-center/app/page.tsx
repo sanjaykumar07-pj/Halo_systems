@@ -35,13 +35,10 @@ export default function LoginPage() {
     localStorage.setItem("halo_user", JSON.stringify(session));
 
     setTimeout(() => {
-      const hostname = window.location.hostname;
-      const protocol = window.location.protocol;
-      
       if (formData.role === "staff") {
-        window.location.href = `${protocol}//${hostname}:8084`;
+        router.push("/staff");
       } else if (formData.role === "fan") {
-        window.location.href = `${protocol}//${hostname}:8082`;
+        router.push("/fan");
       } else {
         router.push("/dashboard");
       }
