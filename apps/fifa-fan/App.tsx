@@ -82,6 +82,17 @@ export default function FIFAFanApp() {
             <View style={s.liveDot} />
             <Text style={s.liveText}>LIVE — Match Day</Text>
           </View>
+          <TouchableOpacity 
+            style={s.signOutBtn}
+            onPress={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('halo_user');
+                window.location.href = 'http://localhost:5000';
+              }
+            }}
+          >
+            <Text style={s.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Language picker */}
@@ -269,4 +280,7 @@ const s = StyleSheet.create({
   etaCard: { backgroundColor: '#0d1f0d', borderWidth: 1, borderColor: '#4caf50', borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 28, width: '100%' },
   etaNum: { fontSize: 32, fontWeight: '900', color: '#4caf50' },
   etaLabel: { fontSize: 12, color: '#8888a0', marginTop: 4 },
+
+  signOutBtn: { marginTop: 12, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: '#ef5350' },
+  signOutText: { color: '#ef5350', fontSize: 12, fontWeight: '700' },
 });

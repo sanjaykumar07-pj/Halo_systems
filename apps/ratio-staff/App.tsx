@@ -206,7 +206,13 @@ export default function HomeScreen() {
               </View>
             </View>
             
-            <TouchableOpacity style={s.logoutBtn} onPress={() => { setShowProfile(false); Alert.alert('Logged out', 'You have been logged out.'); }}>
+            <TouchableOpacity style={s.logoutBtn} onPress={() => { 
+              setShowProfile(false); 
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('halo_user');
+                window.location.href = 'http://localhost:5000';
+              }
+            }}>
               <Text style={s.logoutText}>Log Out</Text>
             </TouchableOpacity>
           </View>
